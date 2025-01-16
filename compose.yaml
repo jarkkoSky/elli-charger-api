@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      dockerfile: ./app.Dockerfile
+    ports:
+      - "80:80"
+  postgres:
+    image: postgres:17.2
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

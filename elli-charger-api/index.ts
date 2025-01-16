@@ -1,9 +1,11 @@
-import { ElliLogin, login } from "./endpoints/login.ts";
+import { login } from "./endpoints/login.ts";
 import { measuredCurrent } from "./endpoints/measured-current.ts";
+import { refreshAuth } from "./endpoints/refresh-auth.ts";
 
 export class ElliChargerApi {
-  private password: string;
-  private auth: ElliLogin | undefined;
+  #password: string;
+  #refreshToken = "";
+  #accessToken = "";
 
   constructor() {
     const password = Deno.env.get("CHARGER_PASSWORD");
@@ -12,14 +14,21 @@ export class ElliChargerApi {
       throw new Error("Charger password not found!");
     }
 
-    this.password = password;
+    this.#password = password;
   }
 
-  async login() {
-    this.auth = await login(this.password);
+  async init() {
+    const { refresh_token, access_token } = await login(this.#password);
+
+    this.#refreshToken = refresh_token;
+    this.#accessToken = access_token;
+
+    setInterval(async () => {
+      this.#accessToken = (await refreshAuth(this.#refreshToken)).access_token;
+    }, 60_000);
   }
 
   measuredCurrent() {
-    return measuredCurrent(this.auth!.access_token);
+    return measuredCurrent(this.#accessToken);
   }
 }

@@ -1,4 +1,4 @@
-import { elliRequest } from "../elli-request.ts";
+import { elliRequest } from "../utils/elli-request.ts";
 
 export type ElliLogin = {
   refresh_token: string;

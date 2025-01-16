@@ -1,7 +1,6 @@
 {
   "tasks": {
-    "build": "docker build -t energy-manager -f app.Dockerfile .",
-    "up": "docker run -it -p 80:80 energy-manager"
+    "up": "docker compose up"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1"
