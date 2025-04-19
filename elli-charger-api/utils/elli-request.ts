@@ -1,5 +1,7 @@
+import config from '../../config.ts'
+
 export function apiUrl(path: string) {
-  return `https://${Deno.env.get("IP_ADDRESS")}/api/v1/${path}`;
+  return `https://${config.ipAddress}/api/v1/${path}`;
 }
 
 export async function elliRequest<T, K>(
